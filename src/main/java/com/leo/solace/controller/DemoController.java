@@ -19,7 +19,8 @@ public class DemoController {
     @Autowired
     private DemoSender demoSender;
 
-    @Autowired private ObjectMapper objectMapper;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @PostMapping("send")
     public void sendMessage(@RequestBody MessageRequest messageRequest) throws JsonProcessingException {
