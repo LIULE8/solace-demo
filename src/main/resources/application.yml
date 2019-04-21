@@ -1,1 +1,23 @@
+spring:
+  application:
+    name: solace-demo
+  datasource:
+    url: jdbc:mysql:///test
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database: mysql
+    open-in-view: true
+  main:
+    allow-bean-definition-overriding: true
+server:
+  port: 9999
 
+# solace config
+solace:
+  jms:
+    host: 192.168.88.111:2222
+    msg-vpn:
+    client-username:
+    client-password:

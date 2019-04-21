@@ -4,9 +4,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.connection.CachingConnectionFactory;
 import org.springframework.jms.core.JmsTemplate;
+import org.springframework.retry.annotation.EnableRetry;
 
 import javax.jms.ConnectionFactory;
 
@@ -16,6 +18,8 @@ import javax.jms.ConnectionFactory;
  */
 @Slf4j
 @Configuration
+@EnableJms
+@EnableRetry
 public class SolaceConfig {
 
   @Autowired private ConnectionFactory connectionFactory;
