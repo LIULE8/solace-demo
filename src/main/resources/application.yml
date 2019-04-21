@@ -2,7 +2,7 @@ spring:
   application:
     name: solace-demo
   datasource:
-    url: jdbc:mysql:///test
+    url: jdbc:mysql://192.168.217.100:3306/solace-demo
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -17,7 +17,7 @@ server:
 # solace config
 solace:
   jms:
-    host: 192.168.88.111:2222
-    msg-vpn:
-    client-username:
-    client-password:
+    host: 192.168.217.100:55555
+    msg-vpn: default
+    client-username: admin
+    client-password: admin
