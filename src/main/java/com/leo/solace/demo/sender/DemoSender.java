@@ -1,4 +1,4 @@
-package com.leo.solace.sender;
+package com.leo.solace.demo.sender;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

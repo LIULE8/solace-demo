@@ -1,4 +1,4 @@
-package com.leo.solace.listener;
+package com.leo.solace.demo.listener;
 
 import com.leo.solace.dto.MessageRequest;
 import lombok.extern.slf4j.Slf4j;
