@@ -5,7 +5,8 @@ import org.springframework.integration.mqtt.support.MqttHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 
-import static com.leo.solace.config.MqttConfigProperties.CHANNEL_NAME_OUT;
+import static com.leo.solace.config.MqttConfig.CHANNEL_NAME_OUT;
+
 
 /**
  * MQTT生产者消息发送接口

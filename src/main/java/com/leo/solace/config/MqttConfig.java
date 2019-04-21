@@ -3,7 +3,7 @@ package com.leo.solace.config;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.annotation.ServiceActivator;
@@ -17,15 +17,40 @@ import org.springframework.integration.mqtt.support.DefaultPahoMessageConverter;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHandler;
 
-import static com.leo.solace.config.MqttConfigProperties.CHANNEL_NAME_IN;
-import static com.leo.solace.config.MqttConfigProperties.CHANNEL_NAME_OUT;
-
 @Slf4j
 @Configuration
-
 public class MqttConfig {
 
-    @Autowired private MqttConfigProperties mqttConfigProperties;
+    /**
+     * 订阅的bean名称
+     */
+    public static final String CHANNEL_NAME_IN = "mqttInboundChannel";
+    /**
+     * 发布的bean名称
+     */
+    public static final String CHANNEL_NAME_OUT = "mqttOutboundChannel";
+
+    @Value("${solace.mqtt.url}")
+    private String url;
+
+    @Value("${solace.mqtt.username}")
+    private String username;
+
+    @Value("${solace.mqtt.password}")
+    private String password;
+
+    @Value("${solace.mqtt.producer.client-id}")
+    private String producerClientId;
+
+    @Value("${solace.mqtt.producer.default-topic}")
+    private String producerDefaultTopic;
+
+    @Value("${solace.mqtt.consumer.client-id}")
+    private String consumerClientId;
+
+    @Value("${solace.mqtt.consumer.default-topic}")
+    private String consumerDefaultTopic;
+
 
     /**
      * MQTT连接器选项
@@ -35,9 +60,9 @@ public class MqttConfig {
     @Bean
     public MqttConnectOptions mqttConnectOptions() {
         MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
-        mqttConnectOptions.setUserName(mqttConfigProperties.getUsername());
-        mqttConnectOptions.setPassword(mqttConfigProperties.getPassword().toCharArray());
-        mqttConnectOptions.setServerURIs(new String[]{mqttConfigProperties.getUrl()});
+        mqttConnectOptions.setUserName(username);
+        mqttConnectOptions.setPassword(password.toCharArray());
+        mqttConnectOptions.setServerURIs(new String[]{url});
         mqttConnectOptions.setKeepAliveInterval(2);
         return mqttConnectOptions;
     }
@@ -72,9 +97,9 @@ public class MqttConfig {
     @Bean
     @ServiceActivator(inputChannel = CHANNEL_NAME_OUT)
     public MessageHandler mqttOutbound() {
-        MqttPahoMessageHandler messageHandler = new MqttPahoMessageHandler(mqttConfigProperties.getProducerClientId(), mqttClientFactory());
+        MqttPahoMessageHandler messageHandler = new MqttPahoMessageHandler(producerClientId, mqttClientFactory());
         messageHandler.setAsync(true);
-        messageHandler.setDefaultTopic(mqttConfigProperties.getProducerDefaultTopic());
+        messageHandler.setDefaultTopic(producerDefaultTopic);
         return messageHandler;
     }
 
@@ -98,8 +123,8 @@ public class MqttConfig {
         // 可以同时消费（订阅）多个Topic
         MqttPahoMessageDrivenChannelAdapter adapter =
                 new MqttPahoMessageDrivenChannelAdapter(
-                        mqttConfigProperties.getConsumerClientId(), mqttClientFactory(),
-                        StringUtils.split(mqttConfigProperties.getConsumerDefaultTopic(), ","));
+                        consumerClientId, mqttClientFactory(),
+                        StringUtils.split(consumerDefaultTopic, ","));
         adapter.setCompletionTimeout(5000);
         adapter.setConverter(new DefaultPahoMessageConverter());
         adapter.setQos(1);
