@@ -141,7 +141,7 @@ public class MqttConfig {
     @Bean
     @ServiceActivator(inputChannel = CHANNEL_NAME_IN)
     public MessageHandler handler() {
-        return message -> log.error("============{}============", message.getPayload());
+        return message -> log.info("============{}============", message.getPayload());
     }
 
 }
